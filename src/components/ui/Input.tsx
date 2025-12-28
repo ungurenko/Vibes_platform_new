@@ -3,6 +3,7 @@ import React from 'react';
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   icon?: React.ElementType;
+  className?: string;
 }
 
 export const Input: React.FC<InputProps> = ({ label, icon: Icon, className = '', ...props }) => (
@@ -12,7 +13,7 @@ export const Input: React.FC<InputProps> = ({ label, icon: Icon, className = '',
       {Icon && <Icon size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />}
       <input
         {...props}
-        className={`w-full ${Icon ? 'pl-11' : 'px-4'} pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-white/10 focus:outline-none focus:border-violet-500 transition-colors ${props.className || ''}`}
+        className={`w-full ${Icon ? 'pl-11' : 'px-4'} pr-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-white/10 focus:outline-none focus:border-violet-500 transition-colors ${className}`}
       />
     </div>
   </div>
@@ -20,7 +21,8 @@ export const Input: React.FC<InputProps> = ({ label, icon: Icon, className = '',
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
     label?: string;
-    options: { value: string; label: string }[];
+    options?: { value: string; label: string }[];
+    className?: string;
 }
 
 export const Select: React.FC<SelectProps> = ({ label, options, className = '', ...props }) => (
@@ -28,11 +30,11 @@ export const Select: React.FC<SelectProps> = ({ label, options, className = '', 
       {label && <label className="block text-sm font-bold text-zinc-700 dark:text-zinc-300 mb-2">{label}</label>}
       <select
         {...props}
-        className={`w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-white/10 focus:outline-none focus:border-violet-500 transition-colors appearance-none ${props.className || ''}`}
+        className={`w-full px-4 py-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-white/10 focus:outline-none focus:border-violet-500 transition-colors appearance-none ${className}`}
       >
-        {options.map(opt => (
+        {options ? options.map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
-        ))}
+        )) : props.children}
       </select>
     </div>
 );

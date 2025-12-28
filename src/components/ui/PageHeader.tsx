@@ -5,12 +5,14 @@ interface PageHeaderProps {
   description?: string;
   action?: React.ReactNode;
   children?: React.ReactNode;
+  icon?: React.ReactNode;
 }
 
-export const PageHeader: React.FC<PageHeaderProps> = ({ title, description, action, children }) => (
+export const PageHeader: React.FC<PageHeaderProps> = ({ title, description, action, children, icon }) => (
   <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
     <div>
-      <h2 className="font-display text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white mb-2">
+      <h2 className="font-display text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white mb-2 flex items-center gap-3">
+        {icon}
         {title}
       </h2>
       {description && <p className="text-zinc-500 dark:text-zinc-400">{description}</p>}

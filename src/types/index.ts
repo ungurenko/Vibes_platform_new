@@ -164,13 +164,14 @@ export interface Student {
   name: string;
   avatar: string;
   email: string;
-  status: 'active' | 'inactive' | 'completed' | 'stalled';
+  status: 'active' | 'inactive' | 'completed' | 'stalled' | 'banned';
   progress: number;
   currentModule: string;
   lastActive: string; // ISO Date string or relative time for mocks
   joinedDate: string; // ISO Date string
   projects: StudentProjects;
   notes?: string;
+  isBanned?: boolean;
 }
 
 export interface AdminStat {
@@ -195,7 +196,7 @@ export interface InviteLink {
   status: 'active' | 'used' | 'deactivated';
   created: string; // ISO Date
   expiresAt?: string | null; // ISO Date or null for infinite
-  usedByEmail?: string;
+  usedBy?: string;
   usedByName?: string;
   usedAt?: string; // ISO Date
 }

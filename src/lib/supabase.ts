@@ -14,9 +14,13 @@ const isValidUrl = (url: string) => {
     }
 };
 
-if (!supabaseUrl || !supabaseAnonKey || !isValidUrl(supabaseUrl)) {
-  console.error('❌ Supabase configuration is invalid or missing!');
-  console.info('Check your Vercel Environment Variables: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY');
+const isConfigValid = supabaseUrl && 
+                     supabaseAnonKey && 
+                     isValidUrl(supabaseUrl) && 
+                     !supabaseUrl.includes('placeholder');
+
+if (!isConfigValid) {
+  console.warn('⚠️ Supabase configuration is missing or invalid. Use .env file or Vercel Environment Variables.');
 }
 
 const customStorage = {
@@ -31,8 +35,12 @@ const customStorage = {
         try {
             localStorage.setItem(key, value);
         } catch (e: any) {
-            // If it's a quota error, we try to clear old chat history to make room
-            if (e.name === 'QuotaExceededError' || e.message?.includes('quota')) {
+            const isQuotaError = e.name === 'QuotaExceededError' || 
+                                 e.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+                                 e.message?.toLowerCase().includes('quota');
+
+            if (isQuotaError) {
+                console.error("Хранилище браузера переполнено! Попытка очистить историю чатов для освобождения места.");
                 const keysToRemove = [];
                 for (let i = 0; i < localStorage.length; i++) {
                     const k = localStorage.key(i);
@@ -42,11 +50,10 @@ const customStorage = {
                 }
                 keysToRemove.forEach(k => localStorage.removeItem(k));
                 
-                // Try again after cleanup
                 try {
                     localStorage.setItem(key, value);
                 } catch {
-                    console.error("Storage still full after cleanup");
+                    console.warn("Не удалось сохранить данные даже после очистки истории чатов.");
                 }
             }
         }

@@ -140,7 +140,7 @@ const Home: React.FC<HomeProps> = ({
     }
   };
 
-  const itemVariants = {
+  const itemVariants: any = {
     hidden: { y: 20, opacity: 0 },
     show: {
       y: 0,
